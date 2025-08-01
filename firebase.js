@@ -1,6 +1,7 @@
-// firebase.js
+require('dotenv').config();
+
 const admin = require('firebase-admin');
-const serviceAccount = require('./familyguide-36419-firebase-adminsdk-fbsvc-3b861cb53f');
+const serviceAccount = require(process.env.FIREBASE_CREDENTIALS_PATH);
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
