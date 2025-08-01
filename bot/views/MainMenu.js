@@ -3,11 +3,9 @@ module.exports = function sendMainMenu(bot, chatId, name = '', role = 'user', me
         [
             { text: '🎮 Список игр', callback_data: 'view_games' },
             { text: '❓ Задать вопрос', callback_data: 'ask_question' }
-
-            // { text: '📘 Список гайдов', callback_data: 'view_guides' }
         ],
         [
-            { text: 'Заполнить анкету специалиста', callback_data: 'specialist' },
+            { text: '🤝 Сотрудничество', callback_data: 'specialist' },
             { text: '🔍 Поиск игры', callback_data: 'search_game_by_name' },
         ]
     ];

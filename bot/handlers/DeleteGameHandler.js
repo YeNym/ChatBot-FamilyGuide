@@ -14,7 +14,16 @@ class DeleteGameHandler {
 
             if (data === 'delete_game') {
                 session.step = 'awaiting_game_name_for_deletion';
-                await bot.sendMessage(chatId, '🔍 Введите название игры, которую хотите удалить:');
+                const sent = await bot.sendMessage(chatId, '🔍 Введите название игры, которую хотите удалить:', {
+                    reply_markup: {
+                        inline_keyboard: [
+                            [{ text: '🔙 Назад', callback_data: 'cancel_delete_game_step' }]
+                        ]
+                    }
+                });
+                session.step = 'awaiting_game_name_for_deletion';
+                session.tempMessageId = sent.message_id;
+                // await bot.answerCallbackQuery(query.id);
                 return bot.answerCallbackQuery(query.id);
             }
 
@@ -24,6 +33,19 @@ class DeleteGameHandler {
                 clearSession(userId);
                 await bot.answerCallbackQuery(query.id);
                 await bot.sendMessage(chatId, '✅ Игра удалена.');
+                return sendMainMenu(bot, chatId, session.name, session.role);
+            }
+            if (data === 'cancel_delete_game_step') {
+                if (session.tempMessageId) {
+                    try {
+                        await bot.deleteMessage(chatId, session.tempMessageId);
+                    } catch (err) {
+                        console.error('Не удалось удалить сообщение:', err);
+                    }
+                }
+
+                clearSession(userId);
+                await bot.answerCallbackQuery(query.id);
                 return sendMainMenu(bot, chatId, session.name, session.role);
             }
 
@@ -49,10 +71,17 @@ class DeleteGameHandler {
                     .get();
 
                 if (snapshot.empty) {
+                    if (session.tempMessageId) {
+                        try {
+                            await this.bot.deleteMessage(chatId, session.tempMessageId);
+                        } catch (err) {}
+                    }
+                    clearSession(userId);
                     clearSession(userId);
                     await this.bot.sendMessage(chatId, '❌ Игра не найдена.');
                     return sendMainMenu(this.bot, chatId, session.name, session.role);
                 }
+
 
                 const buttons = snapshot.docs.map(doc => {
                     const game = doc.data();
@@ -63,7 +92,14 @@ class DeleteGameHandler {
                 });
 
                 buttons.push([{ text: '🔙 Назад', callback_data: 'cancel_delete_game' }]);
-
+                if (session.tempMessageId) {
+                    try {
+                        await this.bot.deleteMessage(chatId, session.tempMessageId);
+                    } catch (err) {
+                        console.error('Не удалось удалить сообщение с кнопкой Назад:', err);
+                    }
+                    session.tempMessageId = null;
+                }
                 await this.bot.sendMessage(chatId, 'Выберите игру для удаления:', {
                     reply_markup: {
                         inline_keyboard: buttons

@@ -18,7 +18,7 @@ module.exports = {
     ],
     moderationMenu: [
         [
-            { text: '🧾 Новые анкеты', callback_data: 'view_profiles' },
+            { text: '🧾 Предложения', callback_data: 'view_profiles' },
             { text: '🎮 Новые игры', callback_data: 'moderate_games' }
         ],
         [

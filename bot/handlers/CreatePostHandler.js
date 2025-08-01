@@ -26,8 +26,13 @@ class CreatePostHandler {
                 session.step = 'awaiting_post_content';
                 session.draftMessage = null;
 
-                await bot.sendMessage(chatId, messages.enterPostText);
-                return bot.answerCallbackQuery(query.id);
+                await bot.sendMessage(chatId, messages.enterPostText, {
+                    reply_markup: {
+                        inline_keyboard: [[
+                            { text: '🔙 Назад в меню', callback_data: 'cancel_post' }
+                        ]]
+                    }
+                });                return bot.answerCallbackQuery(query.id);
             }
 
             // Подтверждение отправки
@@ -80,7 +85,13 @@ class CreatePostHandler {
                 session.step = 'awaiting_post_content';
                 session.draftMessage = null;
                 await bot.answerCallbackQuery(query.id);
-                return bot.sendMessage(chatId, messages.enterNewPost);
+                return bot.sendMessage(chatId, messages.enterNewPost, {
+                    reply_markup: {
+                        inline_keyboard: [[
+                            { text: '🔙 Назад в меню', callback_data: 'cancel_post' }
+                        ]]
+                    }
+                });
             }
         });
 

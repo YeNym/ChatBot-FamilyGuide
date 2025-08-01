@@ -1,6 +1,7 @@
 const { checkAdminRole } = require('../utils/utils');
 const db = require('../../firebase');
 const sendMainMenu = require('../views/MainMenu');
+const { WELCOME_MESSAGE } = require('../config/messages'); // Импортируем сообщение
 
 class StartCommand {
     constructor(bot) {
@@ -26,6 +27,9 @@ class StartCommand {
 
             const check = await checkAdminRole(userId, 'user');
             const role = check.ok ? check.data.role : 'user';
+            await bot.sendMessage(chatId, WELCOME_MESSAGE(name));
+
+
             return sendMainMenu(bot, chatId, name, role);
         });
     }

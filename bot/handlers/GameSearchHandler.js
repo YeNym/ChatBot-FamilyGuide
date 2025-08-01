@@ -3,6 +3,7 @@ const { getSession } = require('../utils/session');
 const sendMainMenu = require('../views/MainMenu');
 const { checkAdminRole } = require('../utils/utils');
 const keyboards = require('../config/keyboards');
+const { deleteMessageSafe } = require('../utils/deleteMessageSafe');
 
 let handlersRegistered = false;
 
@@ -28,15 +29,20 @@ class SearchGameHandler {
         const session = await getSession(userId);
 
         if (data === 'search_game_by_name') {
+            // await deleteMessageSafe(this.bot, chatId, messageId);
+
             session.step = 'awaiting_game_search_query';
-            return this.bot.sendMessage(chatId, '🔍 Введите название игры для поиска:', {
+            const sent = await this.bot.sendMessage(chatId, '🔍 Введите название игры для поиска:', {
                 reply_markup: {
                     inline_keyboard: [
                         [{ text: '🔙 Назад в меню', callback_data: 'back_search_' }]
                     ]
                 }
             });
+            session.lastPromptMessageId = sent.message_id;
+            return;
         }
+
 
         if (data.startsWith('delete_game_')) {
             const gameId = data.replace('delete_game_', '');
@@ -59,6 +65,7 @@ class SearchGameHandler {
                         [{ text: 'Категория', callback_data: `edit_category_${gameId}` }],
                         [{ text: 'Возраст', callback_data: `edit_age_${gameId}` }],
                         [{ text: 'Описание', callback_data: `edit_description_${gameId}` }],
+                        [{ text: 'Обложка', callback_data: `edit_image_${gameId}` }],
                         [{ text: '❌ Отменить', callback_data: `cancel_edit_${gameId}` }]
                     ]
                 }
@@ -84,6 +91,17 @@ class SearchGameHandler {
             await this.bot.deleteMessage(chatId, messageId);
             return this.bot.sendMessage(chatId, 'Выберите новое возрастное ограничение:', {
                 reply_markup: keyboards.editAgeKeyboard
+            });
+        }
+
+        if (data.startsWith('edit_image_')) {
+            const gameId = data.replace('edit_image_', '');
+            session.step = 'editing_image';
+            session.editingGameId = gameId;
+
+            await this.bot.deleteMessage(chatId, messageId);
+            return this.bot.sendMessage(chatId, '📷 Пришлите новое изображение (фото) для обложки игры:', {
+                reply_markup: keyboards.cancelKeyboard
             });
         }
 
@@ -152,6 +170,17 @@ class SearchGameHandler {
                 reply_markup: keyboards.cancelKeyboard
             });
         }
+        if (data.startsWith('view_game_')) {
+            const gameId = data.replace('view_game_', '');
+            const gameDoc = await db.collection('games').doc(gameId).get();
+
+            if (!gameDoc.exists) {
+                return this.bot.sendMessage(chatId, '❌ Игра не найдена.');
+            }
+
+            const game = gameDoc.data();
+            return this.showGameCard(chatId, game, gameId, userId);
+        }
 
         if (data.startsWith('cancel_edit_')) {
             session.step = null;
@@ -194,23 +223,81 @@ class SearchGameHandler {
 
         if (session.step === 'awaiting_game_search_query') {
             session.step = null;
+            if (session.lastPromptMessageId) {
+                try {
+                    await this.bot.deleteMessage(chatId, session.lastPromptMessageId);
+                } catch (err) {
+                    console.warn('⚠ Не удалось удалить старое сообщение:', err.message);
+                }
+                session.lastPromptMessageId = null;
+            }
+            const searchText = text.toLowerCase();
 
-            const snapshot = await db.collection('games')
-                .where('name', '==', text)
-                .get();
+            const allGamesSnapshot = await db.collection('games').get();
+            const allGames = allGamesSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
 
-            if (snapshot.empty) {
+            const exactMatches = allGames.filter(game =>
+                game.name.toLowerCase() === searchText
+            );
+
+            const partialMatches = allGames.filter(game =>
+                game.name.toLowerCase().includes(searchText) &&
+                game.name.toLowerCase() !== searchText
+            );
+
+            const results = [...exactMatches, ...partialMatches];
+
+            if (results.length === 0) {
                 await this.bot.sendMessage(chatId, '❌ Игра не найдена.');
                 return sendMainMenu(this.bot, chatId, session.name, session.role);
             }
 
-            const doc = snapshot.docs[0];
-            const game = doc.data();
-            const gameId = doc.id;
+            // сохраняем список найденных игр в сессию
+            session.searchResults = results;
 
-            await this.showGameCard(chatId, game, gameId, userId);
-            return;
+            const inlineKeyboard = results.map(game => [
+                { text: game.name, callback_data: `view_game_${game.id}` }
+            ]);
+
+// Добавляем кнопку "Назад в меню" как последнюю строку
+            inlineKeyboard.push([
+                { text: '🔙 Назад в меню', callback_data: 'back_to_main_menu_search_query' }
+            ]);
+
+            return this.bot.sendMessage(chatId, '🔎 Найденные игры:', {
+                reply_markup: { inline_keyboard: inlineKeyboard }
+            });
+
         }
+        if (session.step === 'editing_image' && session.editingGameId) {
+            if (!msg.photo) {
+                return this.bot.sendMessage(chatId, '❗ Пожалуйста, пришлите фото.');
+            }
+
+            const fileId = msg.photo.at(-1).file_id;
+            const gameId = session.editingGameId;
+
+            try {
+                await db.collection('games').doc(gameId).update({ image: fileId });
+
+                const gameDoc = await db.collection('games').doc(gameId).get();
+                const updatedGame = gameDoc.data();
+
+                session.step = null;
+                session.editingGameId = null;
+                session.editingField = null;
+
+                await this.bot.sendMessage(chatId, '✅ Обложка успешно обновлена!');
+                return this.showGameCard(chatId, updatedGame, gameId, userId);
+            } catch (error) {
+                console.error('Ошибка обновления обложки:', error);
+                return this.bot.sendMessage(chatId, '❌ Не удалось обновить обложку.');
+            }
+        }
+
 
         if ((session.step === 'editing_name' || session.step === 'editing_description') && session.editingGameId) {
             const field = session.step.replace('editing_', '');
@@ -240,7 +327,7 @@ class SearchGameHandler {
 
     async showGameCard(chatId, game, gameId, userId) {
         try {
-            const caption = `🎮 *${game.name}*\n📂 Категория: ${game.category}\n🔞 Возраст: ${game.age}+\n📄 ${game.description}`;
+            const caption = `🎮 *${game.name}*\n📂 Категория: ${game.category}\n🔞 Возраст: ${game.age}+\n\n📄 ${game.description}`;
 
             const roleCheck = await checkAdminRole(userId, 'moderator');
             const buttons = [];
@@ -254,7 +341,7 @@ class SearchGameHandler {
 
             buttons.push({ text: '🔙 Назад в меню', callback_data: 'back_to_main_menu_search_query' });
 
-            if (game.image && game.image.startsWith('http')) {
+            if (game.image) {
                 await this.bot.sendPhoto(chatId, game.image, {
                     caption,
                     parse_mode: 'Markdown',

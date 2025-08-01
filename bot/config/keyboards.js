@@ -20,32 +20,32 @@ module.exports = {
     gameCategoryKeyboard: {
         inline_keyboard: [
             [
-                { text: '🗣 Общение', callback_data: 'set_game_category_Communication' },
-                { text: '🧠 Интеллект', callback_data: 'set_game_category_Cognitive' }
+                { text: '🗣 Общение', callback_data: 'set_game_category_Общение' },
+                { text: '🧠 Интеллект', callback_data: 'set_game_category_Ителлект' }
             ],
             [
-                { text: '🗨 Речь', callback_data: 'set_game_category_Speech' },
-                { text: '🎨 Творчество', callback_data: 'set_game_category_Artistic' }
+                { text: '🗨 Речь', callback_data: 'set_game_category_Речь' },
+                { text: '🎨 Творчество', callback_data: 'set_game_category_Творчество' }
             ],
             [
-                { text: '🏃 Спорт', callback_data: 'set_game_category_Physical' },
-                { text: '🧘 Духовность', callback_data: 'set_game_category_Spiritual' }
+                { text: '🏃 Спорт', callback_data: 'set_game_category_Спорт' },
+                { text: '🧘 Духовность', callback_data: 'set_game_category_Духовность' }
             ]
         ]
     },
     filterCategoryKeyboard: {
         inline_keyboard: [
             [
-                { text: '🗣 Общение', callback_data: 'filter_game_category_Communication' },
-                { text: '🧠 Интеллект', callback_data: 'filter_game_category_Cognitive' }
+                { text: '🗣 Общение', callback_data: 'filter_game_category_Общение' },
+                { text: '🧠 Интеллект', callback_data: 'filter_game_category_Ителлект' }
             ],
             [
-                { text: '🗨 Речь', callback_data: 'filter_game_category_Speech' },
-                { text: '🎨 Творчество', callback_data: 'filter_game_category_Artistic' }
+                { text: '🗨 Речь', callback_data: 'filter_game_category_Речь' },
+                { text: '🎨 Творчество', callback_data: 'filter_game_category_Творчество' }
             ],
             [
-                { text: '🏃 Спорт', callback_data: 'filter_game_category_Physical' },
-                { text: '🧘 Духовность', callback_data: 'filter_game_category_Spiritual' }
+                { text: '🏃 Спорт', callback_data: 'filter_game_category_Спорт' },
+                { text: '🧘 Духовность', callback_data: 'filter_game_category_Духовность' }
             ]
         ]
     },
@@ -65,32 +65,32 @@ module.exports = {
     searchCategoryKeyboard: {
         inline_keyboard: [
             [
-                { text: '🗣 Общение', callback_data: 'search_game_category_Communication' },
-                { text: '🧠 Интеллект', callback_data: 'search_game_category_Cognitive' }
+                { text: '🗣 Общение', callback_data: 'search_game_category_Общение' },
+                { text: '🧠 Интеллект', callback_data: 'search_game_category_Ителлект' }
             ],
             [
-                { text: '🗨 Речь', callback_data: 'search_game_category_Speech' },
-                { text: '🎨 Творчество', callback_data: 'search_game_category_Artistic' }
+                { text: '🗨 Речь', callback_data: 'search_game_category_Речь' },
+                { text: '🎨 Творчество', callback_data: 'search_game_category_Творчество' }
             ],
             [
-                { text: '🏃 Спорт', callback_data: 'search_game_category_Physical' },
-                { text: '🧘 Духовность', callback_data: 'search_game_category_Spiritual' }
+                { text: '🏃 Спорт', callback_data: 'search_game_category_Спорт' },
+                { text: '🧘 Духовность', callback_data: 'search_game_category_Духовность' }
             ]
         ]
     },
     editCategoryKeyboard: {
         inline_keyboard: [
             [
-                { text: '🗣 Общение', callback_data: 'update_category_Communication' },
-                { text: '🧠 Интеллект', callback_data: 'update_category_Cognitive' }
+                { text: '🗣 Общение', callback_data: 'update_category_Общение' },
+                { text: '🧠 Интеллект', callback_data: 'update_category_Ителлект' }
             ],
             [
-                { text: '🗨 Речь', callback_data: 'update_category_Speech' },
-                { text: '🎨 Творчество', callback_data: 'update_category_Artistic' }
+                { text: '🗨 Речь', callback_data: 'update_category_Речь' },
+                { text: '🎨 Творчество', callback_data: 'update_category_Творчество' }
             ],
             [
-                { text: '🏃 Спорт', callback_data: 'update_category_Physical' },
-                { text: '🧘 Духовность', callback_data: 'update_category_Spiritual' }
+                { text: '🏃 Спорт', callback_data: 'update_category_Спорт' },
+                { text: '🧘 Духовность', callback_data: 'update_category_Духовность' }
             ]
         ]
     },
@@ -125,6 +125,11 @@ module.exports = {
                 { text: '6+', callback_data: 'filter_game_age_6' },
                 { text: '12+', callback_data: 'filter_game_age_12' }
             ]
+        ]
+    },
+    backKeyboard: {
+        inline_keyboard: [
+            [{ text: '❌ Отменить', callback_data: 'backKeyboard_menu' }]
         ]
     },
 

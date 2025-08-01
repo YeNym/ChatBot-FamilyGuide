@@ -1,6 +1,8 @@
 const db = require('../../firebase');
 const { getSession } = require('../utils/session');
 const sendMainMenu = require('../views/MainMenu');
+const {questionNotification} = require('../config/messages');
+
 
 let handlerInitialized = false;
 
@@ -26,8 +28,32 @@ class AskQuestionHandler {
             const session = await getSession(userId);
             session.step = 'awaiting_user_question';
 
-            return this.bot.sendMessage(chatId, '✉️ Задайте вопрос специалисту:');
+            const sent = await this.bot.sendMessage(chatId, questionNotification, {
+                reply_markup: {
+                    inline_keyboard: [
+                        [{ text: '🔙 Назад в меню', callback_data: 'cancel_question_' }]
+                    ]
+                }
+            });
+
+            session.lastPromptMessageId = sent.message_id;
+            return;
         }
+
+        if (data === 'cancel_question_') {
+            const session = await getSession(userId);
+            session.step = null;
+
+            try {
+                await this.bot.deleteMessage(chatId, query.message.message_id);
+            } catch (err) {
+                console.warn('⚠ Не удалось удалить сообщение вопроса:', err.message);
+            }
+
+            // return;
+        }
+
+
     }
 
     async handleMessage(msg) {
@@ -49,6 +75,15 @@ class AskQuestionHandler {
                 });
 
                 session.step = null;
+
+                if (session.lastPromptMessageId) {
+                    try {
+                        await this.bot.deleteMessage(chatId, session.lastPromptMessageId);
+                    } catch (err) {
+                        console.warn('⚠ Не удалось удалить старое сообщение:', err.message);
+                    }
+                    session.lastPromptMessageId = null;
+                }
 
                 await this.bot.sendMessage(chatId, '✅ Ваш вопрос отправлен специалисту!');
                 return sendMainMenu(this.bot, chatId, session.name, session.role);
