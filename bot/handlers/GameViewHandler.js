@@ -8,7 +8,7 @@ class GameViewHandler {
     constructor(bot) {
         this.bot = bot;
         this.pageSize = 5;
-
+//
         bot.on('callback_query', async (query) => {
             const { id: callbackId, data, from, message } = query;
 
@@ -41,6 +41,25 @@ class GameViewHandler {
                         ]
                     }
                 });
+            }
+            if (data.startsWith('filter_game_location_') && session.step === 'filter_location') {
+                const loc = data.replace('filter_game_location_', '');
+                session.filter.location =
+                    loc === 'home' ? 'Дом' :
+                        loc === 'walk' ? 'Улица' :
+                            loc === 'institution' ? 'Заведение' :
+                                loc === 'snow' ? 'Со снегом' : loc;
+
+                session.page = 0;
+                session.step = null;
+
+                try {
+                    await this.bot.deleteMessage(message.chat.id, message.message_id);
+                } catch (err) {
+                    console.error('Ошибка при удалении сообщения с локацией:', err);
+                }
+
+                return this.sendGamesPage(chatId, session.filter, 0, session);
             }
 
             if (data === 'backKeyboard_menu') {
@@ -109,8 +128,7 @@ class GameViewHandler {
     async handleAgeSelection(data, chatId, messageId, session) {
         const age = data.replace('filter_game_age_', '') + '+';
         session.filter.age = age;
-        session.page = 0;
-        session.step = null;
+        session.step = 'filter_location';
 
         try {
             await this.bot.deleteMessage(chatId, messageId);
@@ -118,14 +136,20 @@ class GameViewHandler {
             console.error('Ошибка при удалении сообщения с возрастом:', err);
         }
 
-        return this.sendGamesPage(chatId, session.filter, 0, session);
+        return this.bot.sendMessage(chatId, 'Выберите локацию:', {
+            reply_markup: {
+                inline_keyboard: keyboards.filterLocationKeyboard.inline_keyboard
+            }
+        });
     }
+
 
     async sendGamesPage(chatId, filter, page = 0, session) {
         let query = db.collection('games').orderBy('createdAt', 'desc');
 
         if (filter.category) query = query.where('category', '==', filter.category);
         if (filter.age) query = query.where('age', '==', filter.age);
+        if (filter.location) query = query.where('location', '==', filter.location);
 
         const snapshot = await query.offset(page * this.pageSize).limit(this.pageSize).get();
 
@@ -137,7 +161,7 @@ class GameViewHandler {
         for (const doc of snapshot.docs) {
             const game = doc.data();
             const gameId = doc.id;
-            const caption = `🎮 *${game.name}*\n📂 ${game.category} | 🔞 ${game.age}`;
+            const caption = `🎮 *${game.name}*\n📂 ${game.category} | ${game.age} | ${game.location}`;
             const keyboard = {
                 inline_keyboard: [[{ text: 'Подробнее', callback_data: `game_${gameId}` }]]
             };
@@ -177,7 +201,7 @@ class GameViewHandler {
         let query = db.collection('games').orderBy('createdAt', 'desc');
         if (filter.category) query = query.where('category', '==', filter.category);
         if (filter.age) query = query.where('age', '==', filter.age);
-
+        if (filter.location) query = query.where('location', '==', filter.location);
         const nextPageSnapshot = await query.offset((page + 1) * this.pageSize).limit(1).get();
 
         if (page > 0) {
@@ -188,13 +212,10 @@ class GameViewHandler {
             row.push({ text: '➡ Вперёд', callback_data: `games_page_${page + 1}` });
         }
 
-        // Только если есть кнопки "вперёд"/"назад", добавляем строку
         if (row.length > 0) navKeyboard.push(row);
-
-        // В любом случае — добавляем кнопку "назад в меню"
         navKeyboard.push([{ text: '🔙 Назад в меню', callback_data: 'back_to_main_menu_view' }]);
 
-        return this.bot.sendMessage(chatId, '📄 Навигация по играм:', {
+        return this.bot.sendMessage(chatId, 'Навигация по играм:', {
             reply_markup: { inline_keyboard: navKeyboard }
         });
     }
@@ -208,7 +229,7 @@ class GameViewHandler {
         }
 
         const game = doc.data();
-        const text = `🎮 *${game.name}*\n\n📄 ${game.description}\n🗂 Категория: ${game.category}\nВозраст: ${game.age}`;
+        const text = `🎮 *${game.name}*\n\n📄Описание:\n ${game.description}\n\nКатегория: ${game.category}\nВозраст: ${game.age}\nЛокация:${game.location}`;
 
         const backKeyboard = {
             inline_keyboard: [[

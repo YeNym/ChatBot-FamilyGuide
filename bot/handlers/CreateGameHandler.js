@@ -71,14 +71,39 @@ class GameCreateHandler {
             if (data.startsWith('set_game_age_')) {
                 const age = data.replace('set_game_age_', '') + '+';
                 session.newGame.age = age;
-                session.step = 'awaiting_game_image';
+                session.step = 'awaiting_game_location';
 
-                // Удаляем предыдущие сообщения бота
+                // Удаляем предыдущее сообщение бота
                 await this.cleanUpPreviousMessages(chatId, session);
 
                 await this.safeDeleteMessage(chatId, messageId);
                 await this.bot.answerCallbackQuery(id);
 
+                const sent = await this.bot.sendMessage(chatId, 'Выберите локацию игры:', {
+                    reply_markup: {
+                        inline_keyboard: [
+                            ...keyboards.gameLocationKeyboard.inline_keyboard,
+                            ...keyboards.cancelKeyboard.inline_keyboard
+                        ]
+                    }
+                });
+
+                session.promptMessageId = sent.message_id;
+                return;
+            }
+            if (data.startsWith('set_game_location_')) {
+                const location = data.replace('set_game_location_', '');
+                session.newGame.location =
+                    location === 'home' ? 'Дом' :
+                        location === 'walk' ? 'Улица' :
+                            location === 'institution' ? 'Заведение' :
+                                location === 'snow' ? 'Со снегом' : location;
+
+                session.step = 'awaiting_game_image';
+
+                await this.cleanUpPreviousMessages(chatId, session);
+
+                await this.bot.answerCallbackQuery(id);
                 const sent = await this.bot.sendMessage(chatId, '🖼 Отправьте изображение (обложку) для игры или нажмите «Пропустить»:', {
                     reply_markup: {
                         inline_keyboard: [
@@ -91,6 +116,7 @@ class GameCreateHandler {
                 session.promptMessageId = sent.message_id;
                 return;
             }
+
 
             if (data === 'skip_game_image') {
                 await this.saveGameAndReturn(userId, chatId, session.newGame, id);
@@ -127,7 +153,6 @@ class GameCreateHandler {
                 case 'awaiting_game_name':
                     if (!text) return this.bot.sendMessage(chatId, '⚠️ Пожалуйста, введите текст.');
 
-                    // Удаляем предыдущие сообщения бота
                     await this.cleanUpPreviousMessages(chatId, session);
 
                     session.newGame.name = text;
@@ -149,7 +174,7 @@ class GameCreateHandler {
                     session.newGame.description = text;
                     session.step = 'awaiting_game_category';
 
-                    const sent2 = await this.bot.sendMessage(chatId, '🗂 Выберите категорию/жанр игры:', {
+                    const sent2 = await this.bot.sendMessage(chatId, 'Выберите категорию/жанр игры:', {
                         reply_markup: {
                             inline_keyboard: [
                                 ...keyboards.gameCategoryKeyboard.inline_keyboard,

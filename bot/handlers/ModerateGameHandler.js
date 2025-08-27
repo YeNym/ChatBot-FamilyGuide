@@ -23,13 +23,11 @@ class ModerateGameHandler {
                 return;
             }
 
-            // Назад в главное меню
             if (data === 'back_to_main_menu') {
                 await bot.answerCallbackQuery(query.id);
                 return sendMainMenu(bot, chatId, session.name, session.role);
             }
 
-            // Сохранить игру
             if (data.startsWith('approve_game_')) {
                 const gameId = data.replace('approve_game_', '');
                 const docRef = db.collection('pendingGames').doc(gameId);
@@ -101,7 +99,7 @@ class ModerateGameHandler {
         const game = doc.data();
         const gameId = doc.id;
 
-        const text = `🎮 *${game.name}*\n\n📄 ${game.description}\n🗂 Категория: ${game.category}\n🔞 Возраст: ${game.age}\n\n🕹 Всего ожидает: ${total} игр`;
+        const text = `🎮 *${game.name}*\n\nОписание:\n${game.description}\n\nКатегория: ${game.category}\nВозраст: ${game.age}\nЛокация: ${game.location}\n\n🕹 Всего ожидает: ${total} игр`;
 
         const keyboard = {
             inline_keyboard: [
@@ -127,7 +125,6 @@ class ModerateGameHandler {
                 reply_markup: keyboard
             });
         }
-
         return true;
     }
 }
