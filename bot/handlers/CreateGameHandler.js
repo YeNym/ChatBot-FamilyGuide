@@ -97,7 +97,9 @@ class GameCreateHandler {
                     location === 'home' ? 'Дом' :
                         location === 'walk' ? 'Улица' :
                             location === 'institution' ? 'Заведение' :
-                                location === 'snow' ? 'Со снегом' : location;
+                                location === 'snow' ? 'Со снегом'  :
+                                    location === 'mix' ? 'Смешанная' : location;
+
 
                 session.step = 'awaiting_game_image';
 

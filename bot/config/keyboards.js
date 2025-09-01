@@ -144,6 +144,8 @@ module.exports = {
             [{ text: '🌳 Улица', callback_data: 'set_game_location_walk' }],
             [{ text: '🍹 Заведение', callback_data: 'set_game_location_institution' }],
             [{ text: '❄️ Со снегом', callback_data: 'set_game_location_snow' }],
+            [{ text: '📌 Смешанная', callback_data: 'set_game_location_mix' }]
+
         ]
     },
     filterLocationKeyboard: {
@@ -151,7 +153,9 @@ module.exports = {
             [{ text: '🏠 Дом', callback_data: 'filter_game_location_home' }],
             [{ text: '🌳 Улица', callback_data: 'filter_game_location_walk' }],
             [{ text: '🍹 Заведение', callback_data: 'filter_game_location_institution' }],
-            [{ text: '❄️ Со снегом', callback_data: 'filter_game_location_snow' }]
+            [{ text: '❄️ Со снегом', callback_data: 'filter_game_location_snow' }],
+            [{ text: '📌 Смешанная', callback_data: 'set_game_location_mix' }]
+
         ]
     }
 
