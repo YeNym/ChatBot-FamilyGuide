@@ -154,14 +154,9 @@ module.exports = {
             [{ text: '🌳 Улица', callback_data: 'filter_game_location_walk' }],
             [{ text: '🍹 Заведение', callback_data: 'filter_game_location_institution' }],
             [{ text: '❄️ Со снегом', callback_data: 'filter_game_location_snow' }],
-            [{ text: '📌 Смешанная', callback_data: 'set_game_location_mix' }]
+            [{ text: '📌 Смешанная', callback_data: 'filter_game_location_mix' }]
 
         ]
     }
-
-
-
-
-
 
 };

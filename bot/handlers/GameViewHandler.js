@@ -48,7 +48,8 @@ class GameViewHandler {
                     loc === 'home' ? 'Дом' :
                         loc === 'walk' ? 'Улица' :
                             loc === 'institution' ? 'Заведение' :
-                                loc === 'snow' ? 'Со снегом' : loc;
+                                loc === 'snow' ? 'Со снегом'  :
+                                    loc === 'mix' ? 'Смешанная' : loc;
 
                 session.page = 0;
                 session.step = null;
