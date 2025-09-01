@@ -54,25 +54,17 @@ module.exports = {
         inline_keyboard: [
             [
                 { text: '0+', callback_data: 'search_game_age_0' },
-                { text: '3+', callback_data: 'search_game_age_3' },
+                { text: '2+', callback_data: 'search_game_age_2' },
+            ],
+            [
                 { text: '4+', callback_data: 'search_game_age_4' },
-
-            ],
-            [
-                { text: '5+', callback_data: 'search_game_age_5' },
                 { text: '6+', callback_data: 'search_game_age_6' },
-                { text: '7+', callback_data: 'search_game_age_7' }
-            ],
-            [
-                { text: '8+', callback_data: 'search_game_age_8' },
-                { text: '9+', callback_data: 'search_game_age_9' }
-            ],
-            [
-                { text: '10+', callback_data: 'search_game_age_10' },
-                { text: '12+', callback_data: 'search_game_age_12' }
-            ]
 
-        ]
+            ],
+            [
+                { text: '7+', callback_data: 'search_game_age_7' }
+            ]
+         ]
     },
     searchCategoryKeyboard: {
         inline_keyboard: [
@@ -111,23 +103,14 @@ module.exports = {
         inline_keyboard: [
             [
                 { text: '0+', callback_data: 'update_age_0' },
-                { text: '3+', callback_data: 'update_age_3' }
+                { text: '2+', callback_data: 'update_age_2' }
             ],
             [
                 { text: '4+', callback_data: 'update_age_4' },
-                { text: '5+', callback_data: 'update_age_5' }
+                { text: '6+', callback_data: 'update_age_6' }
             ],
             [
-                { text: '6+', callback_data: 'update_age_6' },
                 { text: '7+', callback_data: 'update_age_7' }
-            ],
-            [
-                { text: '8+', callback_data: 'update_age_8' },
-                { text: '9+', callback_data: 'update_age_9' }
-            ],
-            [
-                { text: '10+', callback_data: 'update_age_10' },
-                { text: '12+', callback_data: 'update_age_12' }
             ]
         ]
     },
@@ -135,23 +118,14 @@ module.exports = {
         inline_keyboard: [
             [
                 { text: '0+', callback_data: 'set_game_age_0' },
-                { text: '3+', callback_data: 'set_game_age_3' }
+                { text: '2+', callback_data: 'set_game_age_2' }
             ],
             [
                 { text: '4+', callback_data: 'set_game_age_4' },
-                { text: '5+', callback_data: 'set_game_age_5' }
+                { text: '6+', callback_data: 'set_game_age_6' }
             ],
             [
-                { text: '6+', callback_data: 'set_game_age_6' },
                 { text: '7+', callback_data: 'set_game_age_7' }
-            ],
-            [
-                { text: '8+', callback_data: 'set_game_age_8' },
-                { text: '9+', callback_data: 'set_game_age_9' }
-            ],
-            [
-                { text: '10+', callback_data: 'set_game_age_10' },
-                { text: '12+', callback_data: 'set_game_age_12' }
             ]
         ]
     },
@@ -159,23 +133,14 @@ module.exports = {
         inline_keyboard: [
             [
                 { text: '0+', callback_data: 'filter_game_age_0' },
-                { text: '3+', callback_data: 'filter_game_age_3' }
+                { text: '2+', callback_data: 'filter_game_age_2' }
             ],
             [
                 { text: '4+', callback_data: 'filter_game_age_4' },
-                { text: '5+', callback_data: 'filter_game_age_5' }
+                { text: '6+', callback_data: 'filter_game_age_6' }
             ],
             [
-                { text: '6+', callback_data: 'filter_game_age_6' },
                 { text: '7+', callback_data: 'filter_game_age_7' }
-            ],
-            [
-                { text: '8+', callback_data: 'filter_game_age_8' },
-                { text: '9+', callback_data: 'filter_game_age_9' }
-            ],
-            [
-                { text: '10+', callback_data: 'filter_game_age_10' },
-                { text: '12+', callback_data: 'filter_game_age_12' }
             ]
         ]
     },
