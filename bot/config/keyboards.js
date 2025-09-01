@@ -159,8 +159,8 @@ module.exports = {
         inline_keyboard: [
             [{ text: '🏠 Дом', callback_data: 'set_game_location_home' }],
             [{ text: '🌳 Улица', callback_data: 'set_game_location_walk' }],
-            [{ text: '🍹 Заведение', callback_data: 'set_game_location_institution' }],
-            [{ text: '❄️ Со снегом', callback_data: 'set_game_location_snow' }],
+            // [{ text: '🍹 Заведение', callback_data: 'set_game_location_institution' }],
+            // [{ text: '❄️ Со снегом', callback_data: 'set_game_location_snow' }],
             [{ text: '📌 Смешанная', callback_data: 'set_game_location_mix' }]
 
         ]
@@ -169,8 +169,8 @@ module.exports = {
         inline_keyboard: [
             [{ text: '🏠 Дом', callback_data: 'filter_game_location_home' }],
             [{ text: '🌳 Улица', callback_data: 'filter_game_location_walk' }],
-            [{ text: '🍹 Заведение', callback_data: 'filter_game_location_institution' }],
-            [{ text: '❄️ Со снегом', callback_data: 'filter_game_location_snow' }],
+            // [{ text: '🍹 Заведение', callback_data: 'filter_game_location_institution' }],
+            // [{ text: '❄️ Со снегом', callback_data: 'filter_game_location_snow' }],
             [{ text: '📌 Смешанная', callback_data: 'filter_game_location_mix' }]
 
         ]

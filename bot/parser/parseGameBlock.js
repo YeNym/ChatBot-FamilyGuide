@@ -14,6 +14,9 @@ const categories = [
     'Духовность'
 ];
 
+// Вспомогательная функция: первая буква заглавная
+const capitalizeFirstLetter = str => str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+
 // Отображение текста локаций на внутренние коды
 const mapLocation = {
     'Дом': 'Дом',
@@ -32,13 +35,14 @@ function parseGameBlock(block) {
 
     for (const line of lines) {
         const cleanLine = line.replace(/^.*Игра:/, '').trim(); // удаляем всё до "Игра:"
-        if (line.includes('Игра:') && cleanLine) {
+        if (line.includes('🎯 Игра:') && cleanLine) {
             name = cleanLine;
         } else if (line.startsWith('👶 Возраст:')) {
             age = line.replace('👶 Возраст:', '').trim();
         } else if (line.startsWith('🏡 Локация:')) {
-            const loc = line.replace('🏡 Локация:', '').trim();
-            location = mapLocation[loc] || loc;
+            let loc = line.replace('🏡 Локация:', '').trim();
+            loc = capitalizeFirstLetter(loc);          // первая буква заглавная
+            location = mapLocation[loc] || loc;       // нормализация через mapLocation
         } else {
             descriptionParts.push(line);
         }
@@ -78,7 +82,7 @@ async function main() {
         const gameData = parseGameBlock(block);
         if (!gameData.name) continue; // пропускаем пустые блоки
 
-        gameData.category = selectedCategory;
+        gameData.category = capitalizeFirstLetter(selectedCategory);
         gameData.createdAt = new Date();
 
         try {
