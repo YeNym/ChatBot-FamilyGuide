@@ -21,7 +21,7 @@ module.exports = {
         inline_keyboard: [
             [
                 { text: '🗣 Общение', callback_data: 'set_game_category_Общение' },
-                { text: '🧠 Интеллект', callback_data: 'set_game_category_Ителлект' }
+                { text: '🧠 Интеллект', callback_data: 'set_game_category_Интеллект' }
             ],
             [
                 { text: '🗨 Речь', callback_data: 'set_game_category_Речь' },
@@ -37,7 +37,7 @@ module.exports = {
         inline_keyboard: [
             [
                 { text: '🗣 Общение', callback_data: 'filter_game_category_Общение' },
-                { text: '🧠 Интеллект', callback_data: 'filter_game_category_Ителлект' }
+                { text: '🧠 Интеллект', callback_data: 'filter_game_category_Интеллект' }
             ],
             [
                 { text: '🗨 Речь', callback_data: 'filter_game_category_Речь' },
@@ -70,7 +70,7 @@ module.exports = {
         inline_keyboard: [
             [
                 { text: '🗣 Общение', callback_data: 'search_game_category_Общение' },
-                { text: '🧠 Интеллект', callback_data: 'search_game_category_Ителлект' }
+                { text: '🧠 Интеллект', callback_data: 'search_game_category_Интеллект' }
             ],
             [
                 { text: '🗨 Речь', callback_data: 'search_game_category_Речь' },
@@ -86,7 +86,7 @@ module.exports = {
         inline_keyboard: [
             [
                 { text: '🗣 Общение', callback_data: 'update_category_Общение' },
-                { text: '🧠 Интеллект', callback_data: 'update_category_Ителлект' }
+                { text: '🧠 Интеллект', callback_data: 'update_category_Интеллект' }
             ],
             [
                 { text: '🗨 Речь', callback_data: 'update_category_Речь' },
@@ -109,9 +109,9 @@ module.exports = {
                 { text: '4+', callback_data: 'update_age_4' },
                 { text: '6+', callback_data: 'update_age_6' }
             ],
-            [
-                { text: '7+', callback_data: 'update_age_7' }
-            ]
+            // [
+            //     { text: '7+', callback_data: 'update_age_7' }
+            // ]
         ]
     },
     gameAgeKeyboard: {
@@ -124,9 +124,9 @@ module.exports = {
                 { text: '4+', callback_data: 'set_game_age_4' },
                 { text: '6+', callback_data: 'set_game_age_6' }
             ],
-            [
-                { text: '7+', callback_data: 'set_game_age_7' }
-            ]
+            // [
+            //     { text: '7+', callback_data: 'set_game_age_7' }
+            // ]
         ]
     },
     filterAgeKeyboard: {
@@ -139,9 +139,9 @@ module.exports = {
                 { text: '4+', callback_data: 'filter_game_age_4' },
                 { text: '6+', callback_data: 'filter_game_age_6' }
             ],
-            [
-                { text: '7+', callback_data: 'filter_game_age_7' }
-            ]
+            // [
+            //     { text: '7+', callback_data: 'filter_game_age_7' }
+            // ]
         ]
     },
     backKeyboard: {
