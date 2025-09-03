@@ -29,7 +29,7 @@ module.exports = {
             ],
             [
                 { text: '🏃 Спорт', callback_data: 'set_game_category_Спорт' },
-                { text: '🧘 Духовность', callback_data: 'set_game_category_Духовность' }
+                // { text: '🧘 Духовность', callback_data: 'set_game_category_Духовность' }
             ]
         ]
     },
@@ -45,7 +45,7 @@ module.exports = {
             ],
             [
                 { text: '🏃 Спорт', callback_data: 'filter_game_category_Спорт' },
-                { text: '🧘 Духовность', callback_data: 'filter_game_category_Духовность' }
+                // { text: '🧘 Духовность', callback_data: 'filter_game_category_Духовность' }
             ]
         ]
     },
@@ -78,7 +78,7 @@ module.exports = {
             ],
             [
                 { text: '🏃 Спорт', callback_data: 'search_game_category_Спорт' },
-                { text: '🧘 Духовность', callback_data: 'search_game_category_Духовность' }
+                // { text: '🧘 Духовность', callback_data: 'search_game_category_Духовность' }
             ]
         ]
     },
@@ -94,7 +94,7 @@ module.exports = {
             ],
             [
                 { text: '🏃 Спорт', callback_data: 'update_category_Спорт' },
-                { text: '🧘 Духовность', callback_data: 'update_category_Духовность' }
+                // { text: '🧘 Духовность', callback_data: 'update_category_Духовность' }
             ]
         ]
     },

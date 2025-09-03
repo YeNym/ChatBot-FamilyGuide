@@ -75,12 +75,24 @@ async function main() {
     const selectedCategory = categories[categoryIndex];
     console.log(`Выбрана категория: ${selectedCategory}`);
 
+    // ⚡ Загружаем только документы нужной категории
+    const snapshot = await db.collection('games')
+        .where('category', '==', capitalizeFirstLetter(selectedCategory))
+        .get();
+
+    const existingNames = new Set(snapshot.docs.map(doc => doc.data().name));
+
     // Разбиваем текст на блоки по номерам игр
     const gameBlocks = data.split(/\d+\./).filter(Boolean);
 
     for (const block of gameBlocks) {
         const gameData = parseGameBlock(block);
-        if (!gameData.name) continue; // пропускаем пустые блоки
+        if (!gameData.name) continue;
+
+        if (existingNames.has(gameData.name)) {
+            console.log(`⚠️ Пропущено (уже есть в БД): ${gameData.name}`);
+            continue;
+        }
 
         gameData.category = capitalizeFirstLetter(selectedCategory);
         gameData.createdAt = new Date();
@@ -88,12 +100,14 @@ async function main() {
         try {
             await db.collection('games').add(gameData);
             console.log(`✅ Добавлено: ${gameData.name}`);
+            existingNames.add(gameData.name); // добавляем в память
         } catch (err) {
             console.error('❌ Ошибка при добавлении игры:', err.message);
         }
     }
 
-    console.log('Все игры добавлены в базу!');
+    console.log('Все игры обработаны!');
 }
+
 
 main();
