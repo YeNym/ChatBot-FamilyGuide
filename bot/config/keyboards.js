@@ -20,7 +20,7 @@ module.exports = {
     gameCategoryKeyboard: {
         inline_keyboard: [
             [
-                { text: '🗣 Общение', callback_data: 'set_game_category_Общение' },
+                { text: '🗣 Социум', callback_data: 'set_game_category_Общение' },
                 { text: '🧠 Интеллект', callback_data: 'set_game_category_Интеллект' }
             ],
             [
@@ -36,7 +36,7 @@ module.exports = {
     filterCategoryKeyboard: {
         inline_keyboard: [
             [
-                { text: '🗣 Общение', callback_data: 'filter_game_category_Общение' },
+                { text: '🗣 Социум', callback_data: 'filter_game_category_Общение' },
                 { text: '🧠 Интеллект', callback_data: 'filter_game_category_Интеллект' }
             ],
             [
@@ -69,7 +69,7 @@ module.exports = {
     searchCategoryKeyboard: {
         inline_keyboard: [
             [
-                { text: '🗣 Общение', callback_data: 'search_game_category_Общение' },
+                { text: '🗣 Социум', callback_data: 'search_game_category_Общение' },
                 { text: '🧠 Интеллект', callback_data: 'search_game_category_Интеллект' }
             ],
             [
@@ -85,7 +85,7 @@ module.exports = {
     editCategoryKeyboard: {
         inline_keyboard: [
             [
-                { text: '🗣 Общение', callback_data: 'update_category_Общение' },
+                { text: '🗣 Социум', callback_data: 'update_category_Общение' },
                 { text: '🧠 Интеллект', callback_data: 'update_category_Интеллект' }
             ],
             [
