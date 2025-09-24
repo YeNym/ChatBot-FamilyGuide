@@ -62,7 +62,7 @@ module.exports = {
 
             ],
             [
-                { text: '7+', callback_data: 'search_game_age_7' }
+                { text: 'подростки', callback_data: 'search_game_age_подростки' }
             ]
          ]
     },
@@ -109,9 +109,9 @@ module.exports = {
                 { text: '4+', callback_data: 'update_age_4' },
                 { text: '6+', callback_data: 'update_age_6' }
             ],
-            // [
-            //     { text: '7+', callback_data: 'update_age_7' }
-            // ]
+            [
+                { text: 'подростки', callback_data: 'search_game_age_подростки' }
+            ]
         ]
     },
     gameAgeKeyboard: {
@@ -124,9 +124,9 @@ module.exports = {
                 { text: '4+', callback_data: 'set_game_age_4' },
                 { text: '6+', callback_data: 'set_game_age_6' }
             ],
-            // [
-            //     { text: '7+', callback_data: 'set_game_age_7' }
-            // ]
+            [
+                { text: 'подростки', callback_data: 'set_game_age_подростки' }
+            ]
         ]
     },
     filterAgeKeyboard: {
@@ -139,9 +139,9 @@ module.exports = {
                 { text: '4+', callback_data: 'filter_game_age_4' },
                 { text: '6+', callback_data: 'filter_game_age_6' }
             ],
-            // [
-            //     { text: '7+', callback_data: 'filter_game_age_7' }
-            // ]
+            [
+                { text: 'подростки', callback_data: 'filter_game_age_подростки' }
+            ]
         ]
     },
     backKeyboard: {
