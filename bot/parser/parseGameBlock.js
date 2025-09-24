@@ -34,23 +34,31 @@ function parseGameBlock(block) {
     const descriptionParts = [];
 
     for (const line of lines) {
-        const cleanLine = line.replace(/^.*Игра:/, '').trim(); // удаляем всё до "Игра:"
-        if (line.includes('🎯 Игра:') && cleanLine) {
+
+        const cleanLine = line.replace(/^.*Игра:/, '').trim();
+        if (/Игра/.test(line) && cleanLine) {
             name = cleanLine;
-        } else if (line.startsWith('👶 Возраст:')) {
-            age = line.replace('👶 Возраст:', '').trim();
-        } else if (line.startsWith('🏡 Локация:')) {
-            let loc = line.replace('🏡 Локация:', '').trim();
-            loc = capitalizeFirstLetter(loc);          // первая буква заглавная
-            location = mapLocation[loc] || loc;       // нормализация через mapLocation
-        } else {
-            descriptionParts.push(line);
         }
+
+
+        if (line.startsWith('👶 Возраст:')) {
+            age = line.replace('👶 Возраст:', '').trim();
+            continue;
+        }
+
+        if (line.startsWith('🏡 Локация:')) {
+            let loc = line.replace('🏡 Локация:', '').trim();
+            loc = capitalizeFirstLetter(loc);
+            location = mapLocation[loc] || loc;
+            continue;
+        }
+        descriptionParts.push(line);
     }
 
     const description = descriptionParts.join('\n\n');
     return { name, age, location, description };
 }
+
 
 async function main() {
     console.log('Выберите категорию:');

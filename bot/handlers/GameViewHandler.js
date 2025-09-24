@@ -127,8 +127,8 @@ class GameViewHandler {
     }
 
     async handleAgeSelection(data, chatId, messageId, session) {
-        const age = data.replace('filter_game_age_', '') + '+';
-        session.filter.age = age;
+        const age = data.replace('filter_game_age_', '');
+        session.filter.age = age;  // тут уже будет "4+" или "Подростки"
         session.step = 'filter_location';
 
         try {
@@ -143,6 +143,7 @@ class GameViewHandler {
             }
         });
     }
+
 
 
     async sendGamesPage(chatId, filter, page = 0, session) {

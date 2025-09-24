@@ -132,12 +132,12 @@ module.exports = {
     filterAgeKeyboard: {
         inline_keyboard: [
             [
-                { text: '0+', callback_data: 'filter_game_age_0' },
-                { text: '2+', callback_data: 'filter_game_age_2' }
+                { text: '0+', callback_data: 'filter_game_age_0+' },
+                { text: '2+', callback_data: 'filter_game_age_2+' }
             ],
             [
-                { text: '4+', callback_data: 'filter_game_age_4' },
-                { text: '6+', callback_data: 'filter_game_age_6' }
+                { text: '4+', callback_data: 'filter_game_age_4+' },
+                { text: '6+', callback_data: 'filter_game_age_6+' }
             ],
             [
                 { text: 'подростки', callback_data: 'filter_game_age_подростки' }
