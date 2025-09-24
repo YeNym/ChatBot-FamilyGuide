@@ -62,7 +62,7 @@ module.exports = {
 
             ],
             [
-                { text: 'подростки', callback_data: 'search_game_age_подростки' }
+                { text: '8+', callback_data: 'search_game_age_подростки' }
             ]
          ]
     },
@@ -110,7 +110,7 @@ module.exports = {
                 { text: '6+', callback_data: 'update_age_6' }
             ],
             [
-                { text: 'подростки', callback_data: 'search_game_age_подростки' }
+                { text: '8+', callback_data: 'search_game_age_подростки' }
             ]
         ]
     },
@@ -125,7 +125,7 @@ module.exports = {
                 { text: '6+', callback_data: 'set_game_age_6' }
             ],
             [
-                { text: 'подростки', callback_data: 'set_game_age_подростки' }
+                { text: '8+', callback_data: 'set_game_age_подростки' }
             ]
         ]
     },
@@ -140,7 +140,7 @@ module.exports = {
                 { text: '6+', callback_data: 'filter_game_age_6+' }
             ],
             [
-                { text: 'подростки', callback_data: 'filter_game_age_подростки' }
+                { text: '8+', callback_data: 'filter_game_age_подростки' }
             ]
         ]
     },
