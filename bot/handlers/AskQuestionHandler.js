@@ -10,9 +10,7 @@ class AskQuestionHandler {
     constructor(bot) {
         if (handlerInitialized) return;
         handlerInitialized = true;
-
         this.bot = bot;
-
         bot.on('callback_query', this.handleCallbackQuery.bind(this));
         bot.on('message', this.handleMessage.bind(this));
     }
@@ -62,7 +60,6 @@ class AskQuestionHandler {
         const text = msg.text?.trim();
 
         if (!text) return;
-
         const session = await getSession(userId);
 
         if (session.step === 'awaiting_user_question') {
@@ -72,7 +69,9 @@ class AskQuestionHandler {
                     name: session.name || msg.from.first_name,
                     question: text,
                     timestamp: new Date().toISOString(),
+                    notified: false
                 });
+
 
                 session.step = null;
 
@@ -86,6 +85,7 @@ class AskQuestionHandler {
                 }
 
                 await this.bot.sendMessage(chatId, '✅ Ваш вопрос отправлен специалисту!');
+
                 return sendMainMenu(this.bot, chatId, session.name, session.role);
             } catch (error) {
                 console.error('Ошибка при сохранении вопроса:', error);

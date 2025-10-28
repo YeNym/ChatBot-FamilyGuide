@@ -39,23 +39,36 @@ class AdminPanelHandler {
                 else if (data === 'set_role_moderator') newRole = 'moderator';
                 else return;
 
-                await db.collection('admins').doc(session.newId).set({
-                    name: session.newName,
-                    role: newRole
-                });
+                const newUserIdNum = Number(String(session.newId).trim());
+                if (!Number.isFinite(newUserIdNum)) {
+                    await this.bot.sendMessage(chatId, '❗ Введите корректный числовой ID Telegram.');
+                    return;
+                }
+
+                const existing = await db.collection('admins').doc(String(newUserIdNum)).get();
+                const payload = {
+                    userId: newUserIdNum,
+                    name: session.newName || 'Admin',
+                    role: newRole,
+                    updatedAt: new Date()
+                };
+
+                await db.collection('admins').doc(String(newUserIdNum)).set(payload, { merge: true });
 
                 try {
-                    await bot.sendMessage(session.newId, `🎉 Вы были назначены администратором с ролью *${newRole}*!`, {
-                        parse_mode: 'Markdown'
-                    });
-                    await sendMainMenu(bot, session.newId, session.newName, newRole);
+                    await this.bot.sendMessage(newUserIdNum, `🎉 Вам назначена роль: ${newRole}`);
+                    await sendMainMenu(this.bot, newUserIdNum, payload.name, newRole);
                 } catch (err) {
-                    console.warn(`Не удалось уведомить нового админа (${session.newId}):`, err.message);
+                    console.warn(`Не удалось уведомить нового админа (${newUserIdNum}):`, err.message);
                 }
-                await bot.sendMessage(chatId, messages.adminAdded(session.newId, session.newName, newRole));
-                clearSession(userId);
-                return sendMainMenu(bot, chatId, name, role);
+
+                const was = existing.exists ? 'обновлена' : 'добавлена';
+                await this.bot.sendMessage(chatId, `✅ Роль ${was}. ID: ${newUserIdNum}\nИмя: ${payload.name}\nРоль: ${newRole}`);
+
+                await clearSession(userId);
+                return sendMainMenu(this.bot, chatId, name, role);
             }
+
         });
 
         bot.on('message', async (msg) => {
@@ -78,22 +91,31 @@ class AdminPanelHandler {
 
             if (text === '➕ Добавить админа') {
                 session.step = 'awaiting_id';
-                return bot.sendMessage(chatId, messages.enterAdminId);
+                return this.bot.sendMessage(chatId, messages.enterAdminId);
             }
 
             if (session.step === 'awaiting_id') {
-                session.newId = text;
+                const idNum = Number(String(text).trim());
+                if (!Number.isFinite(idNum)) {
+                    return this.bot.sendMessage(chatId, '❗ Введите корректный числовой ID Telegram.');
+                }
+                session.newId = idNum; // храним как число
                 session.step = 'awaiting_name';
-                return bot.sendMessage(chatId, messages.enterAdminName);
+                return this.bot.sendMessage(chatId, messages.enterAdminName);
             }
 
             if (session.step === 'awaiting_name') {
-                session.newName = text;
+                const nameClean = (text || '').trim();
+                if (!nameClean) {
+                    return this.bot.sendMessage(chatId, '❗ Введите имя администратора.');
+                }
+                session.newName = nameClean;
                 session.step = 'awaiting_role';
-                return bot.sendMessage(chatId, messages.selectRole, {
+                return this.bot.sendMessage(chatId, messages.selectRole, {
                     reply_markup: keyboards.selectRoleKeyboard
                 });
             }
+
 
             if (text === '🗑️ Удалить админа') {
                 session.step = 'awaiting_delete_id';
